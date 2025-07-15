@@ -2,6 +2,7 @@ package bloom
 
 import (
 	"math"
+
 	"github.com/bits-and-blooms/bitset"
 )
 
