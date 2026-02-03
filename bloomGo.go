@@ -2,6 +2,7 @@ package bloom
 
 import (
 	"math"
+	"sync"
 
 	"github.com/bits-and-blooms/bitset"
 )
@@ -11,6 +12,7 @@ type BloomFilter struct {
 	numBits   uint
 	numHashes uint
 	bitset    *bitset.BitSet
+	mu        sync.RWMutex
 }
 
 // Constructor for BloomFilter
@@ -65,7 +67,7 @@ func getLocation(hashes [4]uint64, i uint) uint64{
 }
 
 // struct method to apply above location logic on the actual BloomFilter's numBits (modulus part) 
-func (f *BloomFilter) location(hashes [4]uint64, i uint) uint64 {
+func (f *BloomFilter) location(hashes [4]uint64, i uint) uint {
 	return uint(getLocation(hashes, i) % uint64(f.numBits))
 }
 
@@ -79,8 +81,8 @@ func EstimateParameters(dataSize int, fp float64) (numBits uint, numHashes uint)
 }
 
 func NewWithEstimatedParams(dataSize int, fp float64) *BloomFilter {
-	dataSize, fp := EstimateParameters(dataSize, fp)
-	return NewBloomFilter(dataSize, fp)
+	numBits, numHashes := EstimateParameters(dataSize, fp)
+	return NewBloomFilter(numBits, numHashes)
 }
 
 // Getters for outside Bloom Package Use
@@ -99,6 +101,8 @@ func (f *BloomFilter) BitSet() *bitset.BitSet {
 
 // Add data to the Bloom Filter. Return the fileter(Allowing chaining)
 func (f *BloomFilter) Add(data []byte) *BloomFilter{
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	hashes := baseHashes(data)
 	for i:= uint(0); i < f.numHashes; i++{
 		f.bitset.Set(f.location(hashes, i)) // As we iterate i, we are using different hashes to do the double hashing
@@ -139,6 +143,8 @@ func (f *BloomFilter) Add(data []byte) *BloomFilter{
 // True ==> Can be false postive, meaning the data might actually not be in the filter while returning true
 // False ==> Data is DEFINITELY!! not in the filter, never seen before
 func (f *BloomFilter) Verify(data []byte) bool{
+	f.mu.RLock()
+	defer f.mu.RUnlock()
 	h := baseHashes(data)
 	for i:= uint(0); i < f.numHashes; i++{
 		if !f.bitset.Test(f.location(h, i)){
