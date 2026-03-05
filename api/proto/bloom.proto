@@ -6,6 +6,7 @@ package bloom;
 
 // address to generated code
 option go_package = "bloombox/api/bloom_pb";
+import "google/api/annotations.proto";
 
 // ---------------
 //The Service below
@@ -13,13 +14,29 @@ option go_package = "bloombox/api/bloom_pb";
 
 service BloomService{
     // spin up a new filter 
-    rpc CreateFilter(CreateFilterRequest) returns (CreateFilterResponse);
+    rpc CreateFilter(CreateFilterRequest) returns (CreateFilterResponse) {
+        option (google.api.http) = {
+            post: "/v1/filter"
+            body:"*"
+        };
+    }
 
     // Add an item to the active filter
-    rpc Add(AddRequest) returns (AddResponse);
+    rpc Add(AddRequest) returns (AddResponse) {
+        option (google.api.http) ={
+            post: "/v1/filter/add"
+            body: "*"
+        };
+    }
+
 
     // Check if an item is in the active filter
-    rpc Check(CheckRequest) returns (CheckResponse);
+    rpc Check(CheckRequest) returns (CheckResponse){
+        option (google.api.http) = {
+            post: "/v1/filter/check"
+            body: "*"
+        };
+    }
 }
 
 // ----------------

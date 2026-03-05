@@ -11,6 +11,7 @@
 package bloom_pb
 
 import (
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -326,7 +327,7 @@ var File_api_proto_bloom_proto protoreflect.FileDescriptor
 
 const file_api_proto_bloom_proto_rawDesc = "" +
 	"\n" +
-	"\x15api/proto/bloom.proto\x12\x05bloom\"\xa8\x01\n" +
+	"\x15api/proto/bloom.proto\x12\x05bloom\x1a\x1cgoogle/api/annotations.proto\"\xa8\x01\n" +
 	"\x13CreateFilterRequest\x12\x1f\n" +
 	"\vfilter_type\x18\x01 \x01(\tR\n" +
 	"filterType\x12%\n" +
@@ -344,11 +345,12 @@ const file_api_proto_bloom_proto_rawDesc = "" +
 	"\fCheckRequest\x12\x12\n" +
 	"\x04data\x18\x01 \x01(\fR\x04data\"%\n" +
 	"\rCheckResponse\x12\x14\n" +
-	"\x05found\x18\x01 \x01(\bR\x05found2\xb9\x01\n" +
-	"\fBloomService\x12G\n" +
-	"\fCreateFilter\x12\x1a.bloom.CreateFilterRequest\x1a\x1b.bloom.CreateFilterResponse\x12,\n" +
-	"\x03Add\x12\x11.bloom.AddRequest\x1a\x12.bloom.AddResponse\x122\n" +
-	"\x05Check\x12\x13.bloom.CheckRequest\x1a\x14.bloom.CheckResponseB\x17Z\x15bloombox/api/bloom_pbb\x06proto3"
+	"\x05found\x18\x01 \x01(\bR\x05found2\x88\x02\n" +
+	"\fBloomService\x12^\n" +
+	"\fCreateFilter\x12\x1a.bloom.CreateFilterRequest\x1a\x1b.bloom.CreateFilterResponse\"\x15\x82\xd3\xe4\x93\x02\x0f:\x01*\"\n" +
+	"/v1/filter\x12G\n" +
+	"\x03Add\x12\x11.bloom.AddRequest\x1a\x12.bloom.AddResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/filter/add\x12O\n" +
+	"\x05Check\x12\x13.bloom.CheckRequest\x1a\x14.bloom.CheckResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/filter/checkB\x17Z\x15bloombox/api/bloom_pbb\x06proto3"
 
 var (
 	file_api_proto_bloom_proto_rawDescOnce sync.Once
